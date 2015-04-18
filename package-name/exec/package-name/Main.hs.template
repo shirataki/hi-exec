@@ -6,8 +6,8 @@ module Main
 
 import           Prelude
 
-import           ${moduleName}.Main
+import qualified ${moduleName}.Main
 
 
 main :: IO ()
-main = ${moduleName}.Main
+main = ${moduleName}.Main.main

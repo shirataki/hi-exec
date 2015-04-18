@@ -6,6 +6,7 @@ import           Prelude
 import           Test.Hspec
 
 import           ${moduleName}
+import qualified ${moduleName}.Main as Main
 
 
 main :: IO ()
@@ -15,4 +16,4 @@ spec :: Spec
 spec = do
   describe "main" $$ do
     it "returns ()" $$ do
-      ${moduleName}.main `shouldReturn` ()
+      Main.main `shouldReturn` ()
