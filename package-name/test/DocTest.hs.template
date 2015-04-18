@@ -1,0 +1,13 @@
+{-# LANGUAGE NoImplicitPrelude                                               #-}
+
+module Main where
+
+import           Prelude
+import           System.FilePath.Glob
+import           Test.DocTest
+
+
+main :: IO ()
+main = do
+  files <- glob "src/**/*.hs"
+  doctest files

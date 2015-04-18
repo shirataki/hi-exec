@@ -1,0 +1,18 @@
+{-# LANGUAGE NoImplicitPrelude                                               #-}
+
+module ${moduleName}Spec (main, spec) where
+
+import           Prelude
+import           Test.Hspec
+
+import           ${moduleName}
+
+
+main :: IO ()
+main = hspec spec
+
+spec :: Spec
+spec = do
+  describe "main" $$ do
+    it "returns ()" $$ do
+      ${moduleName}.main `shouldReturn` ()

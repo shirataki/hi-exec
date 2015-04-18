@@ -1,0 +1,7 @@
+{-# LANGUAGE NoImplicitPrelude                                               #-}
+
+module ${moduleName}.Internal
+    (
+    ) where
+
+import           Prelude

@@ -1,0 +1,9 @@
+{-# LANGUAGE NoImplicitPrelude                                               #-}
+
+module ${moduleName}.Main where
+
+import           Prelude
+
+
+main :: IO ()
+main = return ()
