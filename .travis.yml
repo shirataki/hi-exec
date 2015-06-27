@@ -1,0 +1,44 @@
+# NB: don't set `language: haskell` here
+
+# The following enables several GHC versions to be tested; often it's enough to test only against the last release in a major GHC version. Feel free to omit lines listings versions you don't need/want testing for.
+env:
+ # see note about Alex/Happy for GHC >= 7.8
+ - CABALVER=1.18 GHCVER=7.8.1
+ - CABALVER=1.18 GHCVER=7.8.2
+ - CABALVER=1.18 GHCVER=7.8.3
+ - CABALVER=1.18 GHCVER=7.8.4
+ - CABALVER=1.22 GHCVER=7.10.1
+ - CABALVER=1.22 GHCVER=7.10.2
+ # see section about GHC HEAD snapshots
+ - CABALVER=head GHCVER=head
+
+# Note: the distinction between `before_install` and `install` is not important.
+before_install:
+ - travis_retry sudo add-apt-repository -y ppa:hvr/ghc
+ - travis_retry sudo apt-get update
+ # see note about happy/alex
+ - travis_retry sudo apt-get install cabal-install-$CABALVER ghc-$GHCVER
+ - export PATH=$HOME/.cabal/bin:/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$PATH
+
+install:
+ - cabal --version
+ - echo "$(ghc --version) [$(ghc --print-project-git-commit-id 2> /dev/null || echo '?')]"
+ - travis_retry cabal update
+ - cabal sandbox init
+ - cabal install -j hi --bindir=$HOME/.cabal/bin
+ - cabal sandbox delete
+
+# Here starts the actual work to be performed for the package under test;
+# any command which exits with a non-zero exit code causes the build to fail.
+script:
+ - hi foo-bar-baz --author=travis --email=travis@mail.example.com --repository=.
+ - cd foo-bar-baz
+ - cabal sandbox init
+ # -v2 provides useful information for debugging
+ - cabal install -j --only-dependencies --enable-tests
+ - cabal configure --enable-tests -v2
+ # this builds all libraries and executables (including tests/benchmarks)
+ - cabal build -j
+ - cabal test -j --show-details=always --test-option=--color
+ # tests that a source-distribution can be generated
+ - cabal sdist
